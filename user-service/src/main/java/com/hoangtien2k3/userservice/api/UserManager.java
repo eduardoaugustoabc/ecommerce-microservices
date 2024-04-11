@@ -42,10 +42,14 @@ public class UserManager {
         this.modelMapper = modelMapper;
     }
 
+    private static final int http_ok = 200;
+    private static final int http_not_found = 404;
+    private static final int http_bad_request = 400;
+
     @ApiOperation(value = "Update user information", notes = "Update the user information with the provided details.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "User updated successfully", response = ResponseMessage.class),
-            @ApiResponse(code = 400, message = "Bad Request", response = ResponseMessage.class)
+            @ApiResponse(code = http_ok, message = "User updated successfully", response = ResponseMessage.class),
+            @ApiResponse(code = http_bad_request, message = "Bad Request", response = ResponseMessage.class)
     })
     @PutMapping("update/{id}")
     @PreAuthorize("isAuthenticated() and hasAuthority('USER')")
@@ -65,7 +69,7 @@ public class UserManager {
 
     @ApiOperation(value = "Change user password",
             notes = "Change the password for the authenticated user.")
-    @ApiResponse(code = 200,
+    @ApiResponse(code = http_ok,
             message = "Password changed successfully",
             response = String.class)
     @PutMapping("/change-password")
@@ -102,8 +106,8 @@ public class UserManager {
 
     @ApiOperation(value = "Get user by ID", notes = "Retrieve user information based on the provided ID.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "User retrieved successfully", response = UserDto.class),
-            @ApiResponse(code = 404, message = "User not found", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "User retrieved successfully", response = UserDto.class),
+            @ApiResponse(code = http_not_found, message = "User not found", response = ResponseEntity.class)
     })
     @GetMapping("/user/{id}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') and principal.id == #id")
@@ -133,8 +137,8 @@ public class UserManager {
     @ApiOperation(value = "Get user information from token",
             notes = "Retrieve user information based on the provided JWT token.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "User information retrieved successfully", response = UserDto.class),
-            @ApiResponse(code = 404, message = "User not found", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "User information retrieved successfully", response = UserDto.class),
+            @ApiResponse(code = http_not_found, message = "User not found", response = ResponseEntity.class)
     })
     @GetMapping("/info")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token) {

@@ -30,10 +30,15 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    private static final int http_ok = 200;
+    private static final int http_not_found = 404;
+    private static final int http_no_content = 204;
+    private static final int http_internal_error = 500;
+
     @ApiOperation(value = "Get all orders", notes = "Retrieve a list of all orders.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Orders retrieved successfully", response = List.class),
-            @ApiResponse(code = 204, message = "No content", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "Orders retrieved successfully", response = List.class),
+            @ApiResponse(code = http_no_content, message = "No content", response = ResponseEntity.class)
     })
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
@@ -46,8 +51,8 @@ public class OrderController {
 
     @ApiOperation(value = "Get all orders with paging", notes = "Retrieve a paginated list of all orders.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Orders retrieved successfully", response = Page.class),
-            @ApiResponse(code = 204, message = "No content", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "Orders retrieved successfully", response = Page.class),
+            @ApiResponse(code = http_no_content, message = "No content", response = ResponseEntity.class)
     })
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
@@ -62,8 +67,8 @@ public class OrderController {
 
     @ApiOperation(value = "Get order by ID", notes = "Retrieve order information based on the provided ID.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Order retrieved successfully", response = OrderDto.class),
-            @ApiResponse(code = 404, message = "Order not found", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "Order retrieved successfully", response = OrderDto.class),
+            @ApiResponse(code = http_not_found, message = "Order not found", response = ResponseEntity.class)
     })
     @GetMapping("/{orderId}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
@@ -76,8 +81,8 @@ public class OrderController {
 
     @ApiOperation(value = "Save order", notes = "Save a new order.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Order saved successfully", response = OrderDto.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "Order saved successfully", response = OrderDto.class),
+            @ApiResponse(code = http_internal_error, message = "Internal Server Error", response = ResponseEntity.class)
     })
     @PostMapping
     @PreAuthorize("hasAuthority('USER')")
@@ -92,8 +97,8 @@ public class OrderController {
 
     @ApiOperation(value = "Update order", notes = "Update an existing order.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Order updated successfully", response = OrderDto.class),
-            @ApiResponse(code = 404, message = "Order not found", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "Order updated successfully", response = OrderDto.class),
+            @ApiResponse(code = http_not_found, message = "Order not found", response = ResponseEntity.class)
     })
     @PutMapping
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -108,8 +113,8 @@ public class OrderController {
 
     @ApiOperation(value = "Update order by ID", notes = "Update an existing order based on the provided ID.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Order updated successfully", response = OrderDto.class),
-            @ApiResponse(code = 404, message = "Order not found", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "Order updated successfully", response = OrderDto.class),
+            @ApiResponse(code = http_not_found, message = "Order not found", response = ResponseEntity.class)
     })
     @PutMapping("/{orderId}")
     @PreAuthorize("hasAuthority('USER')")
@@ -127,8 +132,8 @@ public class OrderController {
 
     @ApiOperation(value = "Delete order by ID", notes = "Delete an order based on the provided ID.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Order deleted successfully", response = Boolean.class),
-            @ApiResponse(code = 404, message = "Order not found", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "Order deleted successfully", response = Boolean.class),
+            @ApiResponse(code = http_not_found, message = "Order not found", response = ResponseEntity.class)
     })
     @DeleteMapping("/{orderId}")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")

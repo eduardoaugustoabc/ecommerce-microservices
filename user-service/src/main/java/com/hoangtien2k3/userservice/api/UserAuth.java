@@ -45,10 +45,15 @@ public class UserAuth {
         this.jwtProvider = jwtProvider;
     }
 
+    private static final int http_ok = 200;
+    private static final int http_bad_request = 400;
+    private static final int http_unauthorized = 401;
+    private static final int http_internal_error = 500;
+
     @ApiOperation(value = "Register a new user", notes = "Registers a new user with the provided details.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "User created successfully", response = ResponseMessage.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseMessage.class)
+            @ApiResponse(code = http_ok, message = "User created successfully", response = ResponseMessage.class),
+            @ApiResponse(code = http_internal_error, message = "Internal Server Error", response = ResponseMessage.class)
     })
     @PostMapping({"/signup", "/register"})
     public Mono<ResponseMessage> register(@Valid @RequestBody SignUp signUp) {
@@ -59,8 +64,8 @@ public class UserAuth {
 
     @ApiOperation(value = "User login", notes = "Logs in a user with the provided credentials.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Login successful", response = JwtResponseMessage.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "Login successful", response = JwtResponseMessage.class),
+            @ApiResponse(code = http_internal_error, message = "Internal Server Error", response = ResponseEntity.class)
     })
     @PostMapping({"/signin", "/login"})
     public Mono<ResponseEntity<JwtResponseMessage>> login(@Valid @RequestBody Login signInForm) {
@@ -78,8 +83,8 @@ public class UserAuth {
 
     @ApiOperation(value = "User logout", notes = "Logs out the authenticated user.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Logged out successfully", response = String.class),
-            @ApiResponse(code = 400, message = "Bad Request", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "Logged out successfully", response = String.class),
+            @ApiResponse(code = http_bad_request, message = "Bad Request", response = ResponseEntity.class)
     })
     @PostMapping("/logout")
     @PreAuthorize("isAuthenticated() and hasAuthority('USER')")
@@ -119,8 +124,8 @@ public class UserAuth {
 
     @ApiOperation(value = "Validate JWT token", notes = "Validates the provided JWT token.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Token is valid", response = Boolean.class),
-            @ApiResponse(code = 401, message = "Unauthorized", response = TokenValidationResponse.class)
+            @ApiResponse(code = http_ok, message = "Token is valid", response = Boolean.class),
+            @ApiResponse(code = http_unauthorized, message = "Unauthorized", response = TokenValidationResponse.class)
     })
     @GetMapping({"/validateToken", "/validate-token"})
     public Boolean validateToken(@RequestHeader(name = "Authorization") String authorizationToken) {
@@ -135,8 +140,8 @@ public class UserAuth {
 
     @ApiOperation(value = "Check user authority", notes = "Checks if the user has the specified authority.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Role access API", response = Boolean.class),
-            @ApiResponse(code = 401, message = "Unauthorized", response = TokenValidationResponse.class)
+            @ApiResponse(code = http_ok, message = "Role access API", response = Boolean.class),
+            @ApiResponse(code = http_unauthorized, message = "Unauthorized", response = TokenValidationResponse.class)
     })
     @GetMapping({"/hasAuthority", "/authorization"})
     public Boolean getAuthority(@RequestHeader(name = "Authorization") String authorizationToken,

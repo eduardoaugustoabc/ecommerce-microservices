@@ -30,10 +30,14 @@ public class UserRole {
         this.headerGenerator = headerGenerator;
     }
 
+    private static final int http_ok = 200;
+    private static final int http_not_found = 404;
+    private static final int http_bad_request = 400;
+
     @ApiOperation(value = "Assign roles to user", notes = "Assign roles to a user with the specified ID.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Roles assigned successfully", response = String.class),
-            @ApiResponse(code = 400, message = "Bad Request", response = String.class)
+            @ApiResponse(code = http_ok, message = "Roles assigned successfully", response = String.class),
+            @ApiResponse(code = http_bad_request, message = "Bad Request", response = String.class)
     })
     @PostMapping("/{id}/assign-roles")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -51,8 +55,8 @@ public class UserRole {
 
     @ApiOperation(value = "Revoke roles from user", notes = "Revoke roles from a user with the specified ID.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Roles revoked successfully", response = String.class),
-            @ApiResponse(code = 400, message = "Bad Request", response = String.class)
+            @ApiResponse(code = http_ok, message = "Roles revoked successfully", response = String.class),
+            @ApiResponse(code = http_bad_request, message = "Bad Request", response = String.class)
     })
     @PostMapping("/{id}/revoke-roles")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -70,8 +74,8 @@ public class UserRole {
 
     @ApiOperation(value = "Get user roles", notes = "Retrieve roles assigned to a user with the specified ID.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "User roles retrieved successfully", response = List.class),
-            @ApiResponse(code = 404, message = "User not found", response = ResponseEntity.class)
+            @ApiResponse(code = http_ok, message = "User roles retrieved successfully", response = List.class),
+            @ApiResponse(code = http_not_found, message = "User not found", response = ResponseEntity.class)
     })
     @GetMapping("/{id}/user-roles")
     public ResponseEntity<List<String>> getUserRoles(@PathVariable Long id) {
